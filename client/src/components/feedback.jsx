@@ -63,6 +63,9 @@ export default function Feedback() {
         </textarea>
         <button type="submit">Submit Feedback</button>
       </form>
+      <button className="back-button" style={{width:"200px"}} onClick={() => window.history.back()}>
+        Back to Dashboard
+      </button>
     </div>
   );
 }

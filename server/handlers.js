@@ -1,5 +1,6 @@
 import { response } from "express";
 import { voters, admins, facultyReps, delegates, classReps, reviews } from "./tables.js";
+import { comparePassword, hashPassword } from "./helpers.js";
 
 async function register(req, res) {
   const { firstname, lastname, email, password, faculty, regno } = req.body;
@@ -12,14 +13,18 @@ async function register(req, res) {
     if (user) {
       return res.status(400).json({ message: "Email already exits" });
     }
-    const newuser = new voters({
+
+    // Hash the password before saving
+    const hashedPassword = hashPassword(password);
+    const newuser = voters({
       firstname,
       lastname,
       email,
-      password,
+      password: hashedPassword,
       faculty,
       regno,
     });
+    
     const registered_user = await newuser.save();
     res
       .status(200)
@@ -29,6 +34,52 @@ async function register(req, res) {
       });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+async function login(req, res) {
+  const { email, password, category } = req.body;
+
+  try {
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
+
+    // Determine the model based on the category
+    let model;
+    if (category === "admin") {
+      model = admins;
+    } else if (category === "voter") {
+      model = voters;
+    } else {
+      return res.status(400).json({ message: "Invalid category" });
+    }
+    // Find the user by email
+    const user = await model.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Compare the provided password with the hashed password if the category is "voter"
+    if (category === "voter") {
+      const isPasswordValid = comparePassword(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(400).json({ message: "Invalid email or password" });
+      }
+    }
+
+    // Exclude the password from the response
+    const { password: _, ...userWithoutPassword } = user._doc;
+
+    res.status(200).json({
+      message: "Login successful",
+      user: userWithoutPassword
+    });
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 }
 
@@ -86,25 +137,6 @@ async function getReviews(req, res) {
   }
 }
 
-async function getVoter(req, res) {
-  try {
-    const users = await voters.find();
-
-    res.status(200).json({ users });
-  } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-}
-
-async function getAdmin(req, res) {
-  try {
-    const users = await admins.find();
-    res.status(200).json({ users });
-  } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-}
-
 async function getFacultyReps(req, res) {
   try {
     const aspirants = await facultyReps.find();
@@ -126,7 +158,6 @@ async function getDelegates(req, res) {
 async function getClassReps(req, res) {
   try {
     const aspirants = await classReps.find();
-    console.log(aspirants);
 
     res.status(200).json({ aspirants });
   } catch (error) {
@@ -136,7 +167,6 @@ async function getClassReps(req, res) {
 
 async function updateVotes(req, res) {
   const { candidateId, electionType, userId } = req.body;
-  console.log("Received data:", { candidateId, electionType, userId });
 
   try {
     // Check if the user has already voted
@@ -185,15 +215,32 @@ async function updateVotes(req, res) {
 
 }
 
+async function resetResults(req, res) {
+  try {
+    // Reset votes for all election models
+    await classReps.updateMany({}, { $set: { votes: 0 } });
+    await facultyReps.updateMany({}, { $set: { votes: 0 } });
+    await delegates.updateMany({}, { $set: { votes: 0 } });
+
+    // Reset hasVoted for all voters
+    await voters.updateMany({}, { $set: { hasVoted: false } });
+
+    res.status(200).json({ message: "Results and voting status reset successfully" });
+  } catch (error) {
+    console.error("Error resetting results:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 export {
   register,
-  getVoter,
-  getAdmin,
   getClassReps,
   getFacultyReps,
   getDelegates,
   updateVotes,
   recordReview,
   getReviews,
-  getResults
+  getResults,
+  resetResults,
+  login
 };

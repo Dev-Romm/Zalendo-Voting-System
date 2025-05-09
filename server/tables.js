@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const voterschema = new mongoose.Schema({
   firstname: { required: true, type: String },
   lastname: { required: true, type: String },
-  email: { required: true, unqiue: true, type: String },
+  email: { required: true, unique: true, type: String },
   password: { required: true, type: String },
   faculty: { required: true, type: String },
   regno: { required: true, type: String },

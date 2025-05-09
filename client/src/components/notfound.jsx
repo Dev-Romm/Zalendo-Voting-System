@@ -9,5 +9,4 @@ export default function NotFound() {
         </div>
     )
 }
-// Compare this snippet from src/components/home.jsx:
-// export default function Home() {     
+ 

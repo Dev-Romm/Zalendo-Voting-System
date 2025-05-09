@@ -9,7 +9,6 @@ import "../styles/login.css";
 export default function Login() {
   const navigate = useNavigate();
   const { userDetails, setUserDetails } = useContext(ElectionContext);
- 
 
   async function handleLogin(event) {
     event.preventDefault(); // Prevent the default form submission behavior
@@ -19,38 +18,27 @@ export default function Login() {
     const category = event.target.category.value;
 
     try {
-      const response = await axios.get(`http://localhost:5002/api/${category}`);
-      const users = response.data?.users || [];
+      // Make a POST request to the login API
+      const response = await axios.post(`http://localhost:5002/api/login`, {
+        email,
+        password,
+        category,
+      });
 
-      const authenticateUser = (users, role) => {
-        for (let i = 0; i < users.length; i++) {
-          if (users[i].email === email && users[i].password === password) {
-            setUserDetails(users[i]); // Set user details in context
-            toast.success(
-              `${role} login successful! Redirecting to the ${role} dashboard.`
-            );
-            navigate(`/${role}`); // Redirect to user dashboard
-            return true;
-          }
-        }
-        return false;
-      };
-
-
-      // Redirect to the appropriate page based on the category
-      if (category === "admin") {
-        if (!authenticateUser(users, "Admin")) {
-          alert("Invalid admin email or password. Please try again!");
-        }
-      } else if (category === "voter") {
-        if (!authenticateUser(users, "Voter")) {
-          alert("Invalid voter email or password. Please try again!");
-        }
-      }
+      // Handle successful login
+      const user = response.data.user;
+      setUserDetails(user); // Set user details in context
+      toast.success(
+        `${category} login successful! Redirecting to the dashboard.`
+      );
+      navigate(`/${category}`); // Redirect to the appropriate dashboard
     } catch (error) {
-      console.error("Error fetching data:", error);
+      // Handle errors
+      toast.error(error.response.data.message);
+      console.error("Error during login:", error);
     }
   }
+
   return (
     <div className="login-container">
       <div className="login-logo-container">

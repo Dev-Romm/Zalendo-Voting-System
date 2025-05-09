@@ -4,42 +4,52 @@ import { ElectionContext, ElectionProvider } from "../contexts/Globalcontext";
 import "../styles/voter.css";
 import toast from "react-hot-toast";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function Voter() {
   const navigate = useNavigate();
-  const { electionType, userDetails, setUserDetails, hasVoted, setHasVoted } = useContext(ElectionContext);
+  const {
+    electionType,
+    userDetails,
+    setUserDetails,
+    hasVoted,
+    setHasVoted,
+    startTime,
+    endTime,
+  } = useContext(ElectionContext);
 
   const [facultyReps, setFacultyReps] = useState([]);
   const [classReps, setClassReps] = useState([]);
   const [delegates, setDelegates] = useState([]);
   const [electionName, setElectionName] = useState("");
   const [loading, setLoading] = useState(true);
-  
-  
 
-  
+  console.log(endTime, startTime);
   async function handleVoting(candidateId) {
     // Logic to handle voting
     if (!hasVoted) {
       try {
         // Mark the user as having voted
-        setHasVoted(true);
-        
-        console.log("Sending vote data:", { electionType, candidateId, userId: userDetails._id });
+        setUserDetails((prevDetails) => ({
+          ...prevDetails,
+          hasVoted: true,
+        })); // Update userDetails in context
+
+        console.log("Sending vote data:", {
+          electionType,
+          candidateId,
+          userId: userDetails._id,
+        });
         // Send a POST request to update the vote count
         const response = await axios.post("http://localhost:5002/api/vote", {
-          electionType, // Send the election type in the request body
-          candidateId, // Send the candidate's ID in the request body
-          userId: userDetails._id // Send the user's ID in the request body
+          electionType,
+          candidateId,
+          userId: userDetails._id,
         });
 
         console.log("Vote response:", response.data);
         toast.success("Vote cast successfully!");
-
-        
-        
       } catch (error) {
-       
         toast.error(error.response?.data?.message || "Error casting vote.");
       }
     } else {
@@ -53,11 +63,23 @@ export default function Voter() {
     // Logic to view results
     navigate("/results");
   }
-  function handleLogout() {
+  async function handleLogout() {
     // Logic to handle logout
-    console.log("Logging out.");
-    setUserDetails(null); // Clear user details from context
-    navigate("/");
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of the system.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in!",
+    });
+
+    if (result.isConfirmed) {
+      console.log("Logging out.");
+      setUserDetails(null); // Clear user details from context
+      navigate("/");
+      toast.success("Logged out successfully!");
+    }
   }
   useEffect(() => {
     async function fetchData() {
@@ -80,8 +102,6 @@ export default function Voter() {
           setElectionName("Delegates");
           setDelegates(response.data?.aspirants);
         }
-
-        
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -93,7 +113,9 @@ export default function Voter() {
   return (
     <div className="voter-container">
       <h2>Voter Dashboard</h2>
-      <p style={{textTransform: "capitalize"}}>Welcome, {userDetails?.firstname || "Voter"}!</p>
+      <p style={{ textTransform: "capitalize" }}>
+        Welcome, {userDetails?.firstname || "Voter"}!
+      </p>
       <p>Your Registration Number: {userDetails?.regno || "N/A"}</p>
       <p>Your Faculty: {userDetails?.faculty || "N/A"}</p>
 
@@ -166,6 +188,9 @@ export default function Voter() {
           LOG OUT
         </button>
       </div>
+      <p className="timeline">
+        Voting starts at {startTime} and ends at {endTime}
+      </p>
     </div>
   );
 }

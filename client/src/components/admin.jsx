@@ -2,6 +2,9 @@ import { useContext, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ElectionContext, ElectionProvider } from "../contexts/Globalcontext";
 import "../styles/admin.css";
+import axios from "axios";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 export default function Admin() {
   const {
@@ -11,19 +14,19 @@ export default function Admin() {
     setDuration,
     startTime,
     setStartTime,
+    endTime,
+    setEndTime,
     userDetails,
     setUserDetails,
   } = useContext(ElectionContext);
   const navigate = useNavigate();
-
-  console.log(userDetails);
 
   function handleAddElection(event) {
     // Logic to add an election
 
     event.preventDefault();
     if (electionType) {
-      alert(
+      toast.success(
         `${electionType} elections have been set up successfully for ${duration} hours!`
       );
       // Here, you can send election data to your backend (e.g., via an API call)
@@ -32,10 +35,7 @@ export default function Admin() {
       alert("Please select an election type.");
     }
   }
-  function handleViewResults() {
-    // Logic to view results
-    console.log("Viewing election results.");
-  }
+ 
   function handleElectionChange(event) {
     // Logic to handle election type change
     const value = event.target.value;
@@ -49,20 +49,56 @@ export default function Admin() {
       setElectionType("delegates");
     }
   }
-  function handleLogout() {
+  async function handleLogout() {
     // Logic to handle logout
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of the system.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in!",
+    });
+  
+    if (result.isConfirmed) {
     console.log("Logging out.");
     setUserDetails(null); // Clear user details from context
     navigate("/");
+    toast.success("Logged out successfully!");
+    }
   }
-  function handleReset() {
+  async function handleReset() {
     // Logic to reset results
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, reset it!",
+      cancelButtonText: "No, cancel!",
+    });
     console.log("Resetting election results.");
+    if (result.isConfirmed) {
+      try {
+        const response = await axios.post(
+          "http://localhost:5002/api/reset-results",
+          {}
+        );
+        console.log("Reset response:", response.data);
+        toast.success("Results reset successfully!");
+      } catch (error) {
+        console.error("Error resetting results:", error);
+        toast.error("Error resetting results.");
+      }
+    }
+   
   }
   return (
     <div className="admin-container">
       <h2>Admin Dashboard</h2>
-      <p style={{textTransform: "capitalize"}}>Welcome, {userDetails.firstname}</p>
+      <p style={{ textTransform: "capitalize" }}>
+        Welcome, {userDetails.firstname || "Admin"}
+      </p>
       <form className="admin-form" onSubmit={handleAddElection}>
         <div className="admin-form-group">
           <label>Select Election Type:</label>
@@ -105,22 +141,35 @@ export default function Admin() {
           onChange={(e) => {
             const selectedDuration = parseInt(e.target.value, 10);
             setDuration(selectedDuration);
-            // You can also log the selected duration here if needed
-            console.log("Selected duration:", selectedDuration);
+
+            if (!startTime || isNaN(new Date(startTime).getTime())) {
+              console.error("Invalid startTime:", startTime);
+              toast.error("Start time is not set or invalid.");
+              return;
+            }
+
             console.log("Start date:", startTime);
-            console.log(
-              "End date:",
-              new Date(
-                new Date(startTime).getTime() +
-                  selectedDuration * 60 * 60 * 1000
-              )
+            let endTime = new Date(
+              new Date(startTime).getTime() + selectedDuration * 60 * 60 * 1000
             );
+
+            const formattedEndTime = endTime.toLocaleString("en-US", {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              second: "numeric",
+              hour12: true,
+            });
+            setEndTime(formattedEndTime);
+            console.log("End date:", formattedEndTime);
           }}
           style={{ marginLeft: "10px" }}
         >
-          <option value="1">1 Hour</option>
-          <option value="2">2 Hours</option>
-          <option value="3">3 Hours</option>
+          <option value="5">5 Hours</option>
+          <option value="8">8 Hours</option>
+          <option value="10">10 Hours</option>
         </select>
         <button type="submit" disabled={!electionType}>
           Add Election
@@ -133,13 +182,16 @@ export default function Admin() {
         <button type="button" onClick={() => navigate("/reviews")}>
           View User Feedback
         </button>
-        <button type="button" onClick={() => handleReset}>
+        <button type="button" onClick={handleReset}>
           Clear Results
         </button>
         <button type="button" onClick={handleLogout}>
           LOG OUT
         </button>
       </div>
+      <p className="timeline">
+        Voting starts at {startTime} and ends at {endTime}
+      </p>
     </div>
   );
 }

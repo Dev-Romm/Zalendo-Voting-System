@@ -30,12 +30,12 @@
     gap: 10px;
     margin-top: 0;
   }
-  .feedback-form button {
+  .feedback-container button {
     width: 250px;
     padding: 10px;
     border: 2px solid #1ee014;
     display: block;
-    margin: 2% auto;
+    margin: 1% auto;
     border-radius: 5px;
     font-size: 1rem;
     color: #fff;
@@ -43,7 +43,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
   }
-  .feedback-form button:hover {
+  .feedback-container button:hover {
     background-color: #fff;
     color: #1ee014;
     transform: scale(1.05);
@@ -66,3 +66,4 @@
     border-color: #1ee014;
     transform: scale(1.02);
   }
+  
