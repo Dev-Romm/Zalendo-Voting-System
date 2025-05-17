@@ -9,14 +9,16 @@ async function register(req, res) {
     if (!firstname || !lastname || !email || !password || !faculty || !regno) {
       return res.status(400).json({ message: "Input all required details" });
     }
+    console.log(111111111);
     const user = await voters.findOne({ email });
+    console.log(222222222);
     if (user) {
       return res.status(400).json({ message: "Email already exits" });
     }
 
     // Hash the password before saving
     const hashedPassword = hashPassword(password);
-    const newuser = voters({
+    const newuser = new voters({
       firstname,
       lastname,
       email,
@@ -59,14 +61,14 @@ async function login(req, res) {
     // Find the user by email
     const user = await model.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({ message: "Invalid email" });
     }
 
     // Compare the provided password with the hashed password if the category is "voter"
     if (category === "voter") {
       const isPasswordValid = comparePassword(password, user.password);
       if (!isPasswordValid) {
-        return res.status(400).json({ message: "Invalid email or password" });
+        return res.status(400).json({ message: "Invalid password" });
       }
     }
 
