@@ -42,7 +42,7 @@ export default function Login() {
   return (
     <div className="login-container">
       <div className="login-logo-container">
-        <img src="218557985.png" alt="Logo" className="logo" />
+        <img src="/218557985.png" alt="Logo" className="logo" />
       </div>
       <div className="login-details-container">
         <h2>Welcome to the Campus Voting System</h2>
