@@ -76,4 +76,4 @@ jobs:
           app-name: 'zalendovs'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A50A8EB01DB84963A8563EE14836C1CE }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1F7C564121BC41E292AB299957787336 }}
