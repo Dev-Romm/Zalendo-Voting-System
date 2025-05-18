@@ -10,6 +10,7 @@ export default function Results() {
   const [results, setResults] = useState([]);
   const [electionName, setElectionName] = useState("");
   const { electionType } = useContext(ElectionContext);
+  const API_URL = process.env.REACT_APP_API_URL;
   const faculties = [
     "Computing and Information Technology",
     "Engineering",
@@ -23,7 +24,7 @@ export default function Results() {
   async function fetchResults() {
     try {
       const response = await axios.get(
-        `http://localhost:5002/api/results?electionType=${electionType}`
+        `${API_URL}/api/results?electionType=${electionType}`
       );
       setResults(response.data.results);
       console.log("Fetched results:", response.data.results);

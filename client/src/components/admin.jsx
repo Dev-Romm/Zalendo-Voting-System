@@ -20,6 +20,8 @@ export default function Admin() {
     setUserDetails,
   } = useContext(ElectionContext);
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL;
+
 
   function handleAddElection(event) {
     // Logic to add an election
@@ -81,7 +83,7 @@ export default function Admin() {
     if (result.isConfirmed) {
       try {
         const response = await axios.post(
-          "http://localhost:5002/api/reset-results",
+          `${API_URL}/api/reset`,
           {}
         );
         console.log("Reset response:", response.data);

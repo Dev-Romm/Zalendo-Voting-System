@@ -5,9 +5,10 @@ import "../styles/reviews.css";
 export default function Reviews() {
   // State to hold the reviews fetched from the server
   const [reviews, setReviews] = useState([]);
+  const API_URL = process.env.REACT_APP_API_URL;
   async function getReviews() {
     try {
-      const response = await axios.get("http://localhost:5002/api/reviews");
+      const response = await axios.get(`${API_URL}/api/reviews`);
       setReviews(response.data.reviews); // Set the reviews in state
       console.log("Fetched reviews:", response.data.reviews);
       

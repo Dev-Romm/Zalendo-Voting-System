@@ -16,10 +16,11 @@ export default function Login() {
     const email = event.target.email.value;
     const password = event.target.password.value;
     const category = event.target.category.value;
+    const API_URL = process.env.REACT_APP_API_URL;
 
     try {
       // Make a POST request to the login API
-      const response = await axios.post(`http://localhost:5002/api/login`, {
+      const response = await axios.post(`${API_URL}/api/login`, {
         email,
         password,
         category,

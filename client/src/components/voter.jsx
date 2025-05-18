@@ -23,6 +23,7 @@ export default function Voter() {
   const [delegates, setDelegates] = useState([]);
   const [electionName, setElectionName] = useState("");
   const [loading, setLoading] = useState(true);
+  const API_URL = process.env.REACT_APP_API_URL;
 
   console.log(endTime, startTime);
   async function handleVoting(candidateId) {
@@ -41,7 +42,7 @@ export default function Voter() {
           userId: userDetails._id,
         });
         // Send a POST request to update the vote count
-        const response = await axios.post("http://localhost:5002/api/vote", {
+        const response = await axios.post(`${API_URL}/api/vote`, {
           electionType,
           candidateId,
           userId: userDetails._id,
@@ -90,7 +91,7 @@ export default function Voter() {
           setHasVoted(userDetails.hasVoted); // Update hasVoted when userDetails changes
         }
         const response = await axios.get(
-          `http://localhost:5002/api/${electionType}`
+          `${API_URL}/api/${electionType}`
         );
         if (electionType === "facultyreps") {
           setElectionName("Faculty Reps");

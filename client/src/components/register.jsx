@@ -14,9 +14,10 @@ export default function Register() {
     const password = event.target.password.value;
     const faculty = event.target.faculty.value;
     const regno = event.target.regno.value;
-
+    const API_URL = process.env.REACT_APP_API_URL;
+    
     try {
-      const response = await axios.post("http://localhost:5002/api/signup", {
+      const response = await axios.post(`${API_URL}/api/signup`, {
         firstname,
         lastname,
         email,
