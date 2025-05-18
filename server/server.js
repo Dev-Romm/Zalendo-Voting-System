@@ -6,7 +6,9 @@ import cors from "cors";
 import { fileURLToPath } from "url";
 import path from "path";
 
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config({ path: 'server/.env' });
+}
 
 const app = express();
 app.use(express.json());
