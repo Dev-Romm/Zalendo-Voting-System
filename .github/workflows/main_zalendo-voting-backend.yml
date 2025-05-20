@@ -1,4 +1,4 @@
-name: Build and deploy Node.js app to Azure Web App - zalendo-voting-system-wp
+name: Build and deploy Node.js app to Azure Web App - zalendo-voting-backend
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: read # Required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
@@ -20,17 +20,17 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: Install dependencies and build server
-        working-directory: ./server
+      - name: npm install, build, and test
         run: |
+          cd server
           npm install
           npm run build --if-present
           npm run test --if-present
 
-      - name: Zip server folder for deployment
+      - name: Zip artifact for deployment
         run: |
           cd server
-          zip -r ../release.zip ./*
+          zip -r ../release.zip ./
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -54,11 +54,11 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      - name: Deploy to Azure Web App
+      - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'zalendo-voting-system-wp'
+          app-name: 'zalendo-voting-backend'
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8C5597C4521D4AFF86268A1CC031D394 }}
