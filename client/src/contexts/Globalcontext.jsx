@@ -9,7 +9,7 @@ export function ElectionProvider({ children }) {
   );
   const API_URL = import.meta.env.MODE === "development"
     ? "http://localhost:5002"
-    : "";
+    : "https://zalendo-voting-backend-fye9c3djeqekf7ev.centralus-01.azurewebsites.net";
   const [userDetails, setUserDetails] = useState(
     JSON.parse(localStorage.getItem("userDetails")) || {}
   );

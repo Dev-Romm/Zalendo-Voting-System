@@ -66,7 +66,7 @@ export default function Login() {
             />
           </div>
           <div className="login-form-group">
-            <span>Category:</span>
+            
             <label htmlFor="admin">Admin</label>
             <input
               type="radio"

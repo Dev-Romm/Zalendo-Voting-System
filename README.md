@@ -76,7 +76,7 @@ campus-online-voting-system/
     ```bash
     npm start
     ```
-    The backend will run on `http://localhost:${port}`.
+    The backend will run on `https://zalendo-voting-backend-fye9c3djeqekf7ev.centralus-01.azurewebsites.net`.
 
 ---
 
@@ -91,14 +91,14 @@ campus-online-voting-system/
 2. **Configure environment variables:**
     Create a `.env` file in the `client` directory:
     ```
-    REACT_APP_API_URL=http://localhost:${port}$
+    REACT_APP_API_URL=https://zalendo-voting-backend-fye9c3djeqekf7ev.centralus-01.azurewebsites.net
     ```
 
 3. **Start the frontend:**
     ```bash
     npm start
     ```
-    The frontend will run on `http://localhost:${port}`.
+    The frontend will run on `https://wonderful-island-0edc7a410.6.azurestaticapps.net`.
 
 ---
 
@@ -117,7 +117,7 @@ campus-online-voting-system/
 - `POST /api/login` — Login as voter or admin
 - `POST /api/review` — Submit a review
 - `GET /api/results` — Get election results
-- ...and more (see `handlers.js`)
+- ...and more (see `routes.js`)
 
 ---
 
