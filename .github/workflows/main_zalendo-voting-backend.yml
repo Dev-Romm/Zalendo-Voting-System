@@ -18,13 +18,12 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '22.x'
+          node-version: "22.x"
 
       - name: Install dependencies and build server
         working-directory: ./server
         run: |
           npm install
-         
 
       - name: Zip server folder for deployment
         run: |
@@ -41,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -57,7 +56,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'zalendo-voting-system-wp'
-          slot-name: 'Production'
+          app-name: "zalendo-voting-system-wp"
+          slot-name: "Production"
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8C5597C4521D4AFF86268A1CC031D394 }}
