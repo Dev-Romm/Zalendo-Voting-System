@@ -1,19 +1,18 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "../styles/reviews.css"; 
+import { ElectionContext } from "../contexts/Globalcontext";
+import { useContext } from "react";
 
 export default function Reviews() {
   // State to hold the reviews fetched from the server
   const [reviews, setReviews] = useState([]);
-  const API_URL = process.env.REACT_APP_API_URL;
+  const { API_URL } = useContext(ElectionContext);
   async function getReviews() {
     try {
       const response = await axios.get(`${API_URL}/api/reviews`);
       setReviews(response.data.reviews); // Set the reviews in state
       console.log("Fetched reviews:", response.data.reviews);
-      
-      
-      
     } catch (error) {
       console.error("Error fetching reviews:", error);
       

@@ -7,6 +7,9 @@ export function ElectionProvider({ children }) {
   const [electionType, setElectionType] = useState(
     localStorage.getItem("electionType") || "classreps"
   );
+  const API_URL = import.meta.env.MODE === "development"
+    ? "http://localhost:5002"
+    : "";
   const [userDetails, setUserDetails] = useState(
     JSON.parse(localStorage.getItem("userDetails")) || {}
   );
@@ -63,6 +66,7 @@ export function ElectionProvider({ children }) {
         setStartTime,
         endTime,
         setEndTime,
+        API_URL
       }}
     >
       {children}

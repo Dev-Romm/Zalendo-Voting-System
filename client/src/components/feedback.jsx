@@ -9,9 +9,8 @@ import axios from "axios";
 export default function Feedback() {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
-  const { userDetails, setUserDetails } = useContext(ElectionContext);
+  const { userDetails, setUserDetails, API_URL } = useContext(ElectionContext);
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL;
   
   async function handleSubmitFeedback(event) {
     event.preventDefault();

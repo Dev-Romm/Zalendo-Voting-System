@@ -18,10 +18,9 @@ export default function Admin() {
     setEndTime,
     userDetails,
     setUserDetails,
+    API_URL,
   } = useContext(ElectionContext);
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL;
-
 
   function handleAddElection(event) {
     // Logic to add an election

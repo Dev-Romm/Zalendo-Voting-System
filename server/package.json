@@ -7,9 +7,9 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "server": "nodemon --env-file=server/.env server/server.js",
+    "server": "nodemon --env-file=.env server.js",
     "build": "npm install && npm install --prefix client && npm run build --prefix client",
-    "start": "node server/server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
