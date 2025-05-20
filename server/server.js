@@ -12,7 +12,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const app = express();
 app.use(express.json());
-app.use(cors({ origin: [process.env.clientUrl] }));
+app.use(cors({ origin: [process.env.clientUrl, "https://wonderful-island-0edc7a410.6.azurestaticapps.net"] }));
 
 // const __filename = fileURLToPath(import.meta.url);
 // console.log("FILENAME", __filename);
