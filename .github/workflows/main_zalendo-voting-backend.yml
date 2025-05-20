@@ -59,4 +59,4 @@ jobs:
           app-name: "zalendo-voting-system-wp"
           slot-name: "Production"
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8C5597C4521D4AFF86268A1CC031D394 }}
+          publish-profile: ${{ secrets.ZALENDO_PP }}
