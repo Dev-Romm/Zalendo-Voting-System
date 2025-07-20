@@ -7,6 +7,7 @@ import { ElectionContext } from "../contexts/Globalcontext";
 
 export default function Register() {
   const navigate = useNavigate();
+  const { API_URL } = useContext(ElectionContext);
   async function handleRegistration(event) {
     event.preventDefault(); // Prevent the default form submission behavior
 
@@ -16,7 +17,7 @@ export default function Register() {
     const password = event.target.password.value;
     const faculty = event.target.faculty.value;
     const regno = event.target.regno.value;
-    const { API_URL } = useContext(ElectionContext);
+    
     try {
       const response = await axios.post(`${API_URL}/api/signup`, {
         firstname,
