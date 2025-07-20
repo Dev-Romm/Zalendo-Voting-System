@@ -61,6 +61,11 @@ campus-online-voting-system/
 
 - [Click here to view the working of Zalendo Voting System](https://drive.google.com/file/d/15ZsPXmP__y4U0uQC0SOFwp2Vyo8CPD7f/view?usp=sharing)
 
+### Admin Login Credentials
+
+- Email: rommy@gmail.com
+- Password: rommy123
+
 ### Backend Setup
 
 1. **Install dependencies:**
@@ -150,7 +155,7 @@ MIT
 
 ## Contributor
 
-- Melvin Simons Omari
+- Melvins Simon Omari
 
 ---
 
