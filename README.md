@@ -140,10 +140,13 @@ MIT
 
 ---
 
-## Authors
+## Author
 
-- [Your Name]
-- [Contributors]
+- Dev-Romm
+
+## Contributor
+
+- Melvin Simons Omari
 
 ---
 
