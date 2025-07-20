@@ -59,7 +59,7 @@ campus-online-voting-system/
 
 ### Video Demonstration
 
-- [Click here to view the working of Zalendo Voting System](https://drive.google.com/file/d/1ATx5PojKweZPqlSNexsdvb32nBmJy8Eo/view?usp=sharing)
+- [Click here to view the working of Zalendo Voting System](https://drive.google.com/file/d/15ZsPXmP__y4U0uQC0SOFwp2Vyo8CPD7f/view?usp=sharing)
 
 ### Backend Setup
 
