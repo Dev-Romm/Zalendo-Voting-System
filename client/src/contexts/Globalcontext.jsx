@@ -9,7 +9,7 @@ export function ElectionProvider({ children }) {
   );
   const API_URL = import.meta.env.MODE === "development"
     ? "http://localhost:5002"
-    : "http://localhost:5002";
+    : "http://13.53.36.83:5002";
   const [userDetails, setUserDetails] = useState(
     JSON.parse(localStorage.getItem("userDetails")) || {}
   );
