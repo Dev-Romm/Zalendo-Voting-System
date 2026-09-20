@@ -10,6 +10,7 @@ if (process.env.NODE_ENV !== "production") {
   dotenv.config({ path: 'server/.env' });
 }
 
+// CORS config
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: [process.env.clientUrl, "http://localhost:5173", "http://13.53.36.83:5173"] }));
