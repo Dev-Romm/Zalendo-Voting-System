@@ -29,7 +29,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <footer>
-        <p>&copy; 2025 Campus Voting System</p>
+        <p>&copy; 2026 Campus Voting System</p>
       </footer>
     </div>
   );
